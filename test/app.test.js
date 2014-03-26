@@ -23,43 +23,24 @@ describe("app", function() {
         });
 
         describe("when the user starts a session", function() {
-            it("should ask them want they want to do", function() {
+            it("should ask for a password", function() {
                 return tester
                     .start()
                     .check.interaction({
                         state: 'states:start',
                         reply: [
-                            'Hi there! What do you want to do?',
-                            '1. Show this menu again',
-                            '2. Exit'
+                            'Please enter the password',
                         ].join('\n')
                     })
                     .run();
             });
         });
 
-        describe("when the user asks to see the menu again", function() {
-            it("should show the menu again", function() {
+        describe("when the user enters the correct password", function() {
+            it("should accept input as 'password'", function() {
                 return tester
                     .setup.user.state('states:start')
-                    .input('1')
-                    .check.interaction({
-                        state: 'states:start',
-                        reply: [
-                            'Hi there! What do you want to do?',
-                            '1. Show this menu again',
-                            '2. Exit'
-                        ].join('\n')
-                    })
-                    .run();
-            });
-        });
-
-        describe("when the user asks to exit", function() {
-            it("should say thank you and end the session", function() {
-                return tester
-                    .setup.user.state('states:start')
-                    .input('2')
+                    .input('password')
                     .check.interaction({
                         state: 'states:start',
                         reply: [
@@ -69,5 +50,21 @@ describe("app", function() {
                     .run();
             });
         });
+
+        describe("when the user enters the incorrect password", function() {
+            it("should not accept input as 'password1'", function() {
+                return tester
+                    .setup.user.state('states:start')
+                    .input('password1')
+                    .check.interaction({
+                        state: 'states:start',
+                        reply: [
+                            'Wrong Password, try again'
+                        ].join('\n')
+                    })
+                    .run();
+            });
+        });
+
     });
 });

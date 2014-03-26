@@ -1,23 +1,23 @@
 go.app = function() {
     var vumigo = require('vumigo_v02');
     var App = vumigo.App;
-    var Choice = vumigo.states.Choice;
-    var ChoiceState = vumigo.states.ChoiceState;
+//    var Choice = vumigo.states.Choice;
+//    var ChoiceState = vumigo.states.ChoiceState;
+    var FreeText = vumigo.states.FreeText;
     var EndState = vumigo.states.EndState;
 
     var GoApp = App.extend(function(self) {
         App.call(self, 'states:start');
 
         self.states.add('states:start', function(name) {
-            return new ChoiceState(name, {
-                question: 'Hi there! What do you want to do?',
-
-                choices: [
-                    new Choice('states:start', 'Show this menu again'),
-                    new Choice('states:end', 'Exit')],
-
-                next: function(choice) {
-                    return choice.value;
+            return new FreeText(name, {
+                question: 'Please enter the password',
+                next: 'states:end',
+                check: function(content) {
+                   if (content === "password") {
+                       return;
+                   }
+                   return "Wrong Password, try again";
                 }
             });
         });
