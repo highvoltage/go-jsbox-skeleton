@@ -12,14 +12,27 @@ go.app = function() {
         self.states.add('states:start', function(name) {
             return new FreeText(name, {
                 question: 'Please enter the password',
-                next: 'states:end',
+                next: 'states:nameprompt',
                 check: function(content) {
-                   if (content === "password") {
-                       return;
-                   }
-                   return "Wrong Password, try again";
+                    if (content === 'password') {
+                        return;
+                    }
+                    return "Wrong Password, try again";
                 }
             });
+        });
+
+        self.states.add('states:nameprompt', function(name) {
+             return new FreeText(name, {
+                 question: 'Please enter part of name',
+                 next: 'states:end',
+                 check: function(content) {
+                     if (content === "jonathan") {
+                          return "Jonathan: 0731230000";
+                     }
+                     return "No such user found";
+                 }
+             });
         });
 
         self.states.add('states:end', function(name) {

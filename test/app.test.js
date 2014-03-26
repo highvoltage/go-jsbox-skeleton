@@ -42,14 +42,31 @@ describe("app", function() {
                     .setup.user.state('states:start')
                     .input('password')
                     .check.interaction({
-                        state: 'states:start',
+                        state: 'states:nameprompt',
                         reply: [
-                            'Thanks, cheers!'
+                            'Please enter part of name'
                         ].join('\n')
                     })
                     .run();
             });
         });
+
+
+        describe("when the user enters a name", function() {
+            it("should return phonebook entry if exists'", function() {
+                return tester
+                    .setup.user.state('states:nameprompt')
+                    .input('jonathan')
+                    .check.interaction({
+                        state: 'states:nameprompt',
+                        reply: [
+                            'Jonathan: 0731230000'
+                        ].join('\n')
+                    })
+                    .run();
+            });
+        });
+
 
         describe("when the user enters the incorrect password", function() {
             it("should not accept input as 'password1'", function() {
